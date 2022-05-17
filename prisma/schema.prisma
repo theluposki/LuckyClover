@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String          @id @default(uuid())
+  name       String
+  fullName   String
+  nickName   String
+  email      String          @unique
+  password   String
+  imgProfile String?
+  rules      String          @default("user")
+  createAt   DateTime        @default(now())
+  updateAt   DateTime        @updatedAt
+  raffles    UserOnRaffles[]
+}
+
+model UserOnRaffles {
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  raffles   Raffles @relation(fields: [rafflesId], references: [id])
+  rafflesId String
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@id([userId, rafflesId])
+}
+
+model Raffles {
+  id               String             @id @default(uuid())
+  raffleName       String
+  award            String
+  price            Int
+  imgAward         String
+  createAt         DateTime           @default(now())
+  updateAt         DateTime           @updatedAt
+  user             UserOnRaffles[]
+  numbers RafflesOnNumbers[]
+}
+
+model RafflesOnNumbers {
+  Raffles  Raffles  @relation(fields: [raffleId], references: [id])
+  raffleId String
+  number   Numbers  @relation(fields: [numberId], references: [id])
+  numberId String
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@id([numberId, raffleId])
+}
+
+model Numbers {
+  id       String             @id @default(uuid())
+  number   Int                
+  createAt DateTime           @default(now())
+  updateAt DateTime           @updatedAt
+  raffles  RafflesOnNumbers[]
+}
