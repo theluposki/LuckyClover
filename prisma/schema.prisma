@@ -14,7 +14,7 @@ model User {
   id         String          @id @default(uuid())
   name       String
   fullName   String
-  nickName   String
+  nickName   String          @unique
   email      String          @unique
   password   String
   imgProfile String?

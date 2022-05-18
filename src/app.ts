@@ -10,8 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.get("/", Authentic, (req: express.Request, res: express.Response) => res.status(200).json({ Server: "OK" }));
-app.use("/users", UserRouters);
+
+app.use("/users", Authentic, UserRouters);
 app.use("/auth", AuthRouter);
 app.use("/register", Register);
 
