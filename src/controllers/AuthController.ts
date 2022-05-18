@@ -8,6 +8,6 @@ export const AuthController = async (req: Request, res: Response) => {
 
     res.status(200).json(auth)
   } catch (error) {
-    res.status(400).json({ Error: `Error` })
+    res.status(400).json({ Error: `Erro ao se authenticar...` })
   }
 };

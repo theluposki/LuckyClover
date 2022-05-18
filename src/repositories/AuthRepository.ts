@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Hash } from "../Utils/Hash";
-
+import { Token } from "./../Utils/Token";
 
 const prisma = new PrismaClient();
 
@@ -22,15 +22,24 @@ export const AuthRepository = async (User: AuthInterface) => {
     return { message: "User not found" };
   }
 
-  const isPassword: boolean = Hash.compareHashCrypto(
-    password,
-    user.password
-  );
+  const isPassword: boolean = Hash.compareHashCrypto(password, user.password);
 
-  if(!isPassword) {
+  if (!isPassword) {
     return { message: "Invalid username or password" };
   }
+  /*
+  
+  */
+  let { id, nickName, imgProfile, rules } = user;
+  const token = Token.sign(id, rules);
 
-
-  return user;
+  return {
+    user: {
+      id,
+      nickName,
+      imgProfile,
+      rules,
+    },
+    token,
+  };
 };
