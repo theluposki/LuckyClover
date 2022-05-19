@@ -3,8 +3,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 interface NumberInterface {
-  id?: string,
-  number: number
+  id?: string;
+  number: number;
 }
 
 export const NumberRepository = {
@@ -24,8 +24,15 @@ export const NumberRepository = {
   async create(Number: NumberInterface) {
     const number = await prisma.numbers.create({
       data: {
-        number: Number.number 
+        number: Number.number,
       },
+    });
+    return number;
+  },
+  async createMany(Numbers: NumberInterface) {
+    const number = await prisma.numbers.createMany({
+      data: Numbers,
+      skipDuplicates: true,
     });
     return number;
   },
@@ -35,7 +42,7 @@ export const NumberRepository = {
         id,
       },
       data: {
-        number: Number.number
+        number: Number.number,
       },
     });
     return number;

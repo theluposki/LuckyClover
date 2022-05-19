@@ -35,6 +35,25 @@ export const NumberController = {
       res.status(400).json({ error: `Error creating number`, err });
     }
   },
+  async createMany(req: Request, res: Response) {
+    const numbers = req.body;
+
+    console.log(numbers);
+    
+    numbers.forEach((item: { number: number }) => {
+      if (!item.number) {
+        return res.status(400).json({ error: "number is required" });
+      }
+    });
+
+    try {
+      const number = await NumberRepository.createMany(req.body);
+
+      res.status(201).json(number);
+    } catch (err) {
+      res.status(400).json({ error: `Error creating numbers`, err });
+    }
+  },
   async update(req: Request, res: Response) {
     try {
       const number = await NumberRepository.update(req.params.id, req.body);
