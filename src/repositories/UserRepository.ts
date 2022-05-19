@@ -2,9 +2,15 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-interface User {
-  name: string,
-
+interface UserInterface {
+  id?: string;
+  name: string;
+  fullName: string;
+  nickName: string;
+  email?: string;
+  password?: string;
+  imgProfile: string;
+  rules?: string;
 }
 
 export const UserRepository = {
@@ -18,11 +24,19 @@ export const UserRepository = {
         email: true,
         imgProfile: true,
         createAt: true,
-        updateAt: true
-      }
+        updateAt: true,
+      },
     });
 
-    return users
+    return users;
+  },
+  async getOneById(id: string) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user;
   },
   async getOneByEmail(email: string) {
     const user = await prisma.user.findUnique({
@@ -30,6 +44,28 @@ export const UserRepository = {
         email,
       },
     });
-    return user
+    return user;
+  },
+  async update(id: string, User: UserInterface) {
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name: User.name,
+        fullName: User.fullName,
+        nickName: User.nickName,
+        imgProfile: User.imgProfile,
+      },
+    });
+    return user;
+  },
+  async delete(id: string) {
+    const user = await prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+    return user;
   },
 };

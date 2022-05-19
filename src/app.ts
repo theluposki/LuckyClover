@@ -13,14 +13,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", Authentic, (req: express.Request, res: express.Response) => res.status(200).json({ Server: "OK" }));
+app.get("/", (req: express.Request, res: express.Response) => res.status(200).json({ Server: "OK" }));
 
-app.use("/users", Authentic, UserRouters);
 app.use("/auth", Auth);
 app.use("/register", Register);
-app.use("/raffles", RafflesRouters);
-app.use("/numbers", NumbersRouters);
 
-
+app.use("/users", Authentic, UserRouters);
+app.use("/raffles", Authentic, RafflesRouters);
+app.use("/numbers", Authentic, NumbersRouters);
 
 export { app };
