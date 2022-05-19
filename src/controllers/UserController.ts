@@ -9,7 +9,7 @@ export const UserController = {
             
             return res.status(200).json(users)
         } catch (error) {
-            res.status(400).json({ error: `Erro ao listar usuários`})
+            res.status(400).json({ error: `Error listing users`})
         }
     }
 }

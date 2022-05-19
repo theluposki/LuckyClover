@@ -13,7 +13,9 @@ interface UserInterface {
 }
 
 export const RegisterRepository = async (User: UserInterface) => {
+  
   const hash: string = Hash.generateHashCrypto(User.password);
+
   const user = await prisma.user.create({
     data: {
       name: User.name,
